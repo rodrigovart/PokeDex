@@ -7,6 +7,7 @@
 
 import UIKit
 import AlamofireImage
+import MaterialColor
 
 class PokemonCollectionViewCell: UICollectionViewCell {
     
@@ -33,6 +34,7 @@ class PokemonCollectionViewCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = MaterialColor.white
         return label
     }()
     
@@ -70,7 +72,6 @@ class PokemonCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(with pokemon: PokemonViewModel) {
-//        dump(pokemon)
         nameLabel.text = pokemon.name
         containerView.backgroundColor = pokemon.typeColor
         
