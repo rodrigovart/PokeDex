@@ -51,16 +51,43 @@ struct PokemonViewModel {
             return MaterialColor.green.dark1
         case .bug:
             return MaterialColor.deepPurple.dark3
+        case .dragon:
+            return MaterialColor.deepOrange.accent2
+        case .psychic:
+            return MaterialColor.pink.accent1
+        case .electric:
+            return MaterialColor.brown.dark3
+        case .rock:
+            return MaterialColor.brown.dark1
+        case .ice:
+            return MaterialColor.lightBlue.light1
+        case .fighting:
+            return MaterialColor.deepOrange.accent1
+        case .ground:
+            return MaterialColor.brown.dark2
+        case .ghost:
+            return MaterialColor.deepPurple.dark1
+        case .poison:
+            return MaterialColor.deepPurple.light1
         case .unknown:
             return MaterialColor.brown.light3
         }
     }
 }
 
-enum PokemonType {
-    case fire
-    case water
-    case grass
-    case bug
-    case unknown
+enum PokemonType: String, CaseIterable {
+    case fire     = "fire"
+    case water    = "water"
+    case grass    = "grass"
+    case bug      = "bug"
+    case dragon   = "dragon"
+    case psychic  = "psychic"
+    case electric = "electric"
+    case rock     = "rock"
+    case ice      = "ice"
+    case fighting = "fighting"
+    case ground   = "ground"
+    case ghost    = "ghost"
+    case poison   = "poison"
+    case unknown  = "unknown"
 }

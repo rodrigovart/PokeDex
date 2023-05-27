@@ -6,71 +6,83 @@ class PokemonListViewController: UIViewController {
     private let viewModel = PokemonListViewModel()
     private let disposeBag = DisposeBag()
     
-    private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 8
-        layout.minimumInteritemSpacing = 8
-        layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .white
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(PokemonCollectionViewCell.self, forCellWithReuseIdentifier: "PokemonCollectionViewCell")
-        
+    private lazy var filterCollectionView: FilterPokemonsViewController = {
+        let collectionView = FilterPokemonsViewController()
         return collectionView
+    }()
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(PokemonCollectionViewCell.self, forCellReuseIdentifier: "PokemonCollectionViewCell")
+        tableView.delegate = self
+        tableView.dataSource = self
+        return tableView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureViews()
-        bindViewModel()
         viewModel.loadPokemonData()
-    }
-    
-    private func configureViews() {
-        ProgressHUD.show("Carregando...")
-        view.addSubview(collectionView)
-        
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+        bindViewModel()
     }
     
     private func bindViewModel() {
         viewModel.pokemonList
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] _ in
+            .subscribe(onNext: { [weak self] result in
                 guard let self else { return }
-                self.collectionView.reloadData()
-                ProgressHUD.dismiss()
+                self.configureSubviews()
+                self.tableView.reloadData()
             }).disposed(by: disposeBag)
+    }
+    
+    private func configureSubviews() {
+        view.addSubview(filterCollectionView.view)
+        view.addSubview(tableView)
+        addChild(filterCollectionView)
+        filterCollectionView.didMove(toParent: self)
+        configureConstrainsts()
+    }
+    
+    private func configureConstrainsts() {
+        filterCollectionView.view.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                                         left: view.leftAnchor,
+                                         right: view.rightAnchor,
+                                         paddingTop: 8,
+                                         paddingLeft: 8,
+                                         paddingBottom: 8,
+                                         paddingRight: 8,
+                                         height: 100)
+        tableView.anchor(top: filterCollectionView.view.bottomAnchor,
+                         left: view.leftAnchor,
+                         bottom: view.bottomAnchor,
+                         right: view.rightAnchor,
+                         paddingTop: 8)
     }
 }
 
-extension PokemonListViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+extension PokemonListViewController: UITableViewDelegate {}
+
+extension PokemonListViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.pokemonListValue.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PokemonCollectionViewCell", for: indexPath) as! PokemonCollectionViewCell
-
-        let pokemon = viewModel.pokemonListValue[indexPath.item] // Accessing the updated property
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonCollectionViewCell", for: indexPath) as? PokemonCollectionViewCell else { return UITableViewCell() }
+        let pokemon = viewModel.pokemonListValue[indexPath.item]
         cell.configure(with: pokemon)
 
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let itemSize = (collectionView.bounds.width - 16) / 3.5
-        return CGSize(width: itemSize, height: itemSize)
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 200
     }
 }
+
+
