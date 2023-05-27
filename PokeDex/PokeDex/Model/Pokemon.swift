@@ -5,48 +5,62 @@
 //  Created by Rodrigo Vart on 06/05/23.
 //
 
-struct Pokemon: Decodable {
+import UIKit
+import MaterialColor
+
+struct PokemonListResponse: Decodable {
+    let results: [PokemonResponse]
+}
+
+struct PokemonResponse: Decodable {
+    let name: String
+}
+
+struct PokemonDetailsResponse: Decodable {
+    let id: Int
+    let name: String
+    let sprites: SpritesResponse
+    let types: [TypesPokemon]
+}
+
+struct SpritesResponse: Decodable {
+    let front_default: String
+}
+
+struct TypesPokemon: Decodable {
+    let type: TypePokemon
+}
+
+struct TypePokemon: Decodable {
+    let name: String
+}
+
+struct PokemonViewModel {
     let id: Int
     let name: String
     let imageUrl: String
-    let height: Int
-    let weight: Int
-    let baseExperience: Int
-    let types: [PokemonType]
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case name
-        case imageUrl = "sprites.front_default"
-        case height
-        case weight
-        case baseExperience = "base_experience"
-        case types
-    }
-
-    struct PokemonType: Decodable {
-        let name: String
-        let slot: Int
-    }
+    let type: PokemonType
     
-    init(id: Int = 0, name: String = "", imageUrl: String = "", height: Int = 0, weight: Int = 0, baseExperience: Int = 0, types: [PokemonType] = []) {
-        self.id = id
-        self.name = name
-        self.imageUrl = imageUrl
-        self.height = height
-        self.weight = weight
-        self.baseExperience = baseExperience
-        self.types = types
+    var typeColor: UIColor {
+        switch type {
+        case .fire:
+            return MaterialColor.red.base
+        case .water:
+            return MaterialColor.lightBlue.dark1
+        case .grass:
+            return MaterialColor.green.dark1
+        case .bug:
+            return MaterialColor.deepPurple.dark3
+        case .unknown:
+            return MaterialColor.brown.light3
+        }
     }
 }
 
-struct PokemonList: Decodable {
-    let count: Int
-    let results: [PokemonListItem]
+enum PokemonType {
+    case fire
+    case water
+    case grass
+    case bug
+    case unknown
 }
-
-struct PokemonListItem: Decodable {
-    let name: String
-    let url: String
-}
-

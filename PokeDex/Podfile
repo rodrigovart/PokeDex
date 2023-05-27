@@ -7,8 +7,9 @@ target 'PokeDex' do
 
   # Pods for PokeDex
   pod 'Alamofire'
+  pod 'AlamofireImage', '~> 4.1'
   pod 'SwiftyJSON'
   pod 'RxSwift'
   pod 'RxCocoa'
-  pod 'SDWebImage'
+  pod 'MaterialColor'
 end
