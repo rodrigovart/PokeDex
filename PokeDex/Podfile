@@ -12,4 +12,5 @@ target 'PokeDex' do
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'MaterialColor'
+  pod 'ProgressHUD'
 end

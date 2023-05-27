@@ -10,7 +10,6 @@ import AlamofireImage
 import MaterialColor
 
 class PokemonCollectionViewCell: UICollectionViewCell {
-    
     private let containerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 8
@@ -28,16 +27,7 @@ class PokemonCollectionViewCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    
-    private let nameLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = MaterialColor.white
-        return label
-    }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureSubviews()
@@ -51,8 +41,7 @@ class PokemonCollectionViewCell: UICollectionViewCell {
     private func configureSubviews() {
         contentView.addSubview(containerView)
         containerView.addSubview(pokemonImageView)
-        containerView.addSubview(nameLabel)
-        
+
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
@@ -62,17 +51,12 @@ class PokemonCollectionViewCell: UICollectionViewCell {
             pokemonImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
             pokemonImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
             pokemonImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
-            pokemonImageView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.7),
-            
-            nameLabel.topAnchor.constraint(equalTo: pokemonImageView.bottomAnchor, constant: 4),
-            nameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
-            nameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
-            nameLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8)
+            pokemonImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
+            pokemonImageView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 1),
         ])
     }
     
     func configure(with pokemon: PokemonViewModel) {
-        nameLabel.text = pokemon.name
         containerView.backgroundColor = pokemon.typeColor
         
         if let url = URL(string: pokemon.imageUrl) {

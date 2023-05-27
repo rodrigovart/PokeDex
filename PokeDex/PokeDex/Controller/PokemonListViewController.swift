@@ -1,10 +1,8 @@
 import UIKit
-import Alamofire
-import AlamofireImage
 import RxSwift
+import ProgressHUD
 
 class PokemonListViewController: UIViewController {
-    
     private let viewModel = PokemonListViewModel()
     private let disposeBag = DisposeBag()
     
@@ -35,6 +33,7 @@ class PokemonListViewController: UIViewController {
     }
     
     private func configureViews() {
+        ProgressHUD.show("Carregando...")
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
@@ -49,9 +48,10 @@ class PokemonListViewController: UIViewController {
         viewModel.pokemonList
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
-                self?.collectionView.reloadData()
-            })
-            .disposed(by: disposeBag)
+                guard let self else { return }
+                self.collectionView.reloadData()
+                ProgressHUD.dismiss()
+            }).disposed(by: disposeBag)
     }
 }
 
@@ -70,7 +70,7 @@ extension PokemonListViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let itemSize = (collectionView.bounds.width - 16) / 2
+        let itemSize = (collectionView.bounds.width - 16) / 3.5
         return CGSize(width: itemSize, height: itemSize)
     }
 }
