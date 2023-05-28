@@ -74,7 +74,7 @@ class PokemonListViewModel {
        }
     
     private func getPokemonType(for type: TypesPokemon?) -> PokemonType {
-        guard let type else { return .unknown }
+        guard let type else { return .normal }
         let lowercaseName = type.type.name
 
             switch lowercaseName {
@@ -105,7 +105,7 @@ class PokemonListViewModel {
             case "poison":
                 return .poison
             default:
-                return .unknown
+                return .normal
             }
     }
 }

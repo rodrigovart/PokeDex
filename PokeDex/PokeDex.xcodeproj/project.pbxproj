@@ -20,6 +20,7 @@
 		79CED3A6C890B035A685E221 /* Pods_PokeDex.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B63260C359D99907FE8E3862 /* Pods_PokeDex.framework */; };
 		9D61EB9D2A22B8C900A47B24 /* FilterPokemonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D61EB9C2A22B8C900A47B24 /* FilterPokemonsViewController.swift */; };
 		9D61EB9F2A22CAD000A47B24 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D61EB9E2A22CAD000A47B24 /* String+Ext.swift */; };
+		9D61EBA12A22D2D000A47B24 /* FilterPokemonsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D61EBA02A22D2D000A47B24 /* FilterPokemonsCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		3D632BCC68A0AB9996B3DA8F /* Pods-PokeDex.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PokeDex.debug.xcconfig"; path = "Target Support Files/Pods-PokeDex/Pods-PokeDex.debug.xcconfig"; sourceTree = "<group>"; };
 		9D61EB9C2A22B8C900A47B24 /* FilterPokemonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPokemonsViewController.swift; sourceTree = "<group>"; };
 		9D61EB9E2A22CAD000A47B24 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
+		9D61EBA02A22D2D000A47B24 /* FilterPokemonsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPokemonsCollectionViewCell.swift; sourceTree = "<group>"; };
 		B63260C359D99907FE8E3862 /* Pods_PokeDex.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PokeDex.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				1EA117F92A06140000BF2192 /* PokemonTableViewCell.swift */,
+				9D61EBA02A22D2D000A47B24 /* FilterPokemonsCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D61EBA12A22D2D000A47B24 /* FilterPokemonsCollectionViewCell.swift in Sources */,
 				9D61EB9F2A22CAD000A47B24 /* String+Ext.swift in Sources */,
 				1EA3EBBC2A06168300755A6E /* UIView+Ext.swift in Sources */,
 				1EA117FC2A06141600BF2192 /* Pokemon.swift in Sources */,

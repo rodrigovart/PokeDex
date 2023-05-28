@@ -24,7 +24,7 @@ extension String {
         case "psychic":
             return MaterialColor.pink.accent1
         case "electric":
-            return MaterialColor.brown.dark3
+            return MaterialColor.yellow.dark1
         case "rock":
             return MaterialColor.brown.dark3
         case "ice":

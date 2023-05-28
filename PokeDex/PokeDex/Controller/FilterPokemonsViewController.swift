@@ -6,9 +6,13 @@
 //
 
 import UIKit
-import MaterialColor
+
+protocol FilterPokemonsDelegate: AnyObject {
+    func filter(type: String)
+}
 
 class FilterPokemonsViewController: UIViewController {
+    weak var delegate: FilterPokemonsDelegate?
     let reuseIdentifier = "Cell"
     var types: [String] = PokemonType.allCases.map { $0.rawValue }
     
@@ -20,18 +24,9 @@ class FilterPokemonsViewController: UIViewController {
         layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        collectionView.dataSource = self
-        collectionView.delegate = self
+        collectionView.register(FilterPokemonsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView.backgroundColor = .white
         return collectionView
-    }()
-    
-    private lazy var label: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.textColor = MaterialColor.white
-        return label
     }()
     
     override func viewDidLoad() {
@@ -40,31 +35,34 @@ class FilterPokemonsViewController: UIViewController {
         // Set up your collection view
         collectionView.showsHorizontalScrollIndicator = false
         view = collectionView
+        collectionView.dataSource = self
+        collectionView.delegate = self
         types.sort()
     }
 }
 
     // MARK: UICollectionViewDataSource
-extension FilterPokemonsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension FilterPokemonsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return types.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? FilterPokemonsCollectionViewCell else { return UICollectionViewCell() }
+        let type = types[indexPath.item]
+        cell.configure(text: type)
         
-        cell.backgroundColor = types[indexPath.item].toPokemonType()
-        cell.layer.cornerRadius = 20
-        cell.layer.masksToBounds = true
-        cell.contentView.addSubview(label)
-        label.text = types[indexPath.item].capitalized
-        label.center(inView: cell.contentView)
-
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let delegate else { return }
+        let type = types[indexPath.item]
+        delegate.filter(type: type)
+    }
+}
     // MARK: UICollectionViewDelegateFlowLayout
-
+extension FilterPokemonsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let itemSize = (collectionView.bounds.width - 16) / 2
         return CGSize(width: itemSize, height: itemSize/4)

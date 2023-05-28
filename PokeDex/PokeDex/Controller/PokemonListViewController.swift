@@ -2,12 +2,15 @@ import UIKit
 import RxSwift
 import ProgressHUD
 
+
+
 class PokemonListViewController: UIViewController {
     private let viewModel = PokemonListViewModel()
     private let disposeBag = DisposeBag()
     
     private lazy var filterCollectionView: FilterPokemonsViewController = {
         let collectionView = FilterPokemonsViewController()
+        collectionView.delegate = self
         return collectionView
     }()
     
@@ -22,6 +25,7 @@ class PokemonListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        ProgressHUD.show()
         viewModel.loadPokemonData()
         bindViewModel()
     }
@@ -34,6 +38,10 @@ class PokemonListViewController: UIViewController {
                 self.configureSubviews()
                 self.tableView.reloadData()
             }).disposed(by: disposeBag)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            ProgressHUD.dismiss()
+        }
     }
     
     private func configureSubviews() {
@@ -85,4 +93,8 @@ extension PokemonListViewController: UITableViewDataSource {
     }
 }
 
-
+extension PokemonListViewController: FilterPokemonsDelegate {
+    func filter(type: String) {
+        dump(type)
+    }
+}
