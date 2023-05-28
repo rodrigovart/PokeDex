@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  FilterPokemonsViewController.swift
 //  PokeDex
 //
 //  Created by Rodrigo Vart on 27/05/23.
@@ -41,7 +41,7 @@ class FilterPokemonsViewController: UIViewController {
     }
 }
 
-    // MARK: UICollectionViewDataSource
+// MARK: UICollectionViewDataSource
 extension FilterPokemonsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return types.count
@@ -61,7 +61,8 @@ extension FilterPokemonsViewController: UICollectionViewDataSource {
         delegate.filter(type: type)
     }
 }
-    // MARK: UICollectionViewDelegateFlowLayout
+
+// MARK: UICollectionViewDelegateFlowLayout
 extension FilterPokemonsViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let itemSize = (collectionView.bounds.width - 16) / 2

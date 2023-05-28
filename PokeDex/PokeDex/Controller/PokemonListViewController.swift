@@ -2,8 +2,6 @@ import UIKit
 import RxSwift
 import ProgressHUD
 
-
-
 class PokemonListViewController: UIViewController {
     private let viewModel = PokemonListViewModel()
     private let disposeBag = DisposeBag()
@@ -84,7 +82,7 @@ extension PokemonListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonCollectionViewCell", for: indexPath) as? PokemonCollectionViewCell else { return UITableViewCell() }
         let pokemon = viewModel.pokemonListValue[indexPath.item]
         cell.configure(with: pokemon)
-
+        
         return cell
     }
     
