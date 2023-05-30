@@ -8,13 +8,13 @@
 import RxSwift
 import RxCocoa
 import Alamofire
+import SwiftyJSON
 
 class PokemonListViewModel {
     
     private let apiUrl = "https://pokeapi.co/api/v2/pokemon?limit=151"
     private let apiUrlDetail = "https://pokeapi.co/api/v2/pokemon"
-    private let disposeBag = DisposeBag()
-    
+
     let pokemonList = BehaviorSubject<[PokemonViewModel]>(value: [])
     var pokemonListValue: [PokemonViewModel] {
         do {
@@ -52,6 +52,7 @@ class PokemonListViewModel {
 
                    switch response.result {
                    case .success(let pokemonDetailsResponse):
+                       dump(pokemonDetailsResponse)
                        let type: PokemonType = self.getPokemonType(for: pokemonDetailsResponse.types.first)
                        let pokemonViewModel = PokemonViewModel(id: pokemonDetailsResponse.id,
                                                                name: pokemonDetailsResponse.name,

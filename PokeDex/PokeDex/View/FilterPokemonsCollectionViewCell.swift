@@ -9,7 +9,6 @@ import UIKit
 import MaterialColor
 
 class FilterPokemonsCollectionViewCell: UICollectionViewCell {
-    
     private lazy var label: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .bold)

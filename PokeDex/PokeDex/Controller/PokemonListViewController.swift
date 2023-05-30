@@ -1,10 +1,21 @@
 import UIKit
 import RxSwift
 import ProgressHUD
+import MaterialColor
 
 class PokemonListViewController: UIViewController {
     private let viewModel = PokemonListViewModel()
     private let disposeBag = DisposeBag()
+    
+    private lazy var labelFilter: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.textAlignment = .left
+        label.text = "Filter by type:"
+        label.textColor = MaterialColor.black
+        label.numberOfLines = 1
+        return label
+    }()
     
     private lazy var filterCollectionView: FilterPokemonsViewController = {
         let collectionView = FilterPokemonsViewController()
@@ -43,6 +54,7 @@ class PokemonListViewController: UIViewController {
     }
     
     private func configureSubviews() {
+        view.addSubview(labelFilter)
         view.addSubview(filterCollectionView.view)
         view.addSubview(tableView)
         addChild(filterCollectionView)
@@ -51,14 +63,16 @@ class PokemonListViewController: UIViewController {
     }
     
     private func configureConstrainsts() {
-        filterCollectionView.view.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+        labelFilter.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                           left: view.leftAnchor,
+                           right: view.rightAnchor,
+                           paddingLeft: 8,
+                           paddingBottom: 8)
+        filterCollectionView.view.anchor(top: labelFilter.bottomAnchor,
                                          left: view.leftAnchor,
                                          right: view.rightAnchor,
-                                         paddingTop: 8,
-                                         paddingLeft: 8,
-                                         paddingBottom: 8,
-                                         paddingRight: 8,
-                                         height: 100)
+                                         paddingTop: 12,
+                                         height: 50)
         tableView.anchor(top: filterCollectionView.view.bottomAnchor,
                          left: view.leftAnchor,
                          bottom: view.bottomAnchor,

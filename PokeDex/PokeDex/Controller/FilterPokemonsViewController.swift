@@ -15,7 +15,7 @@ class FilterPokemonsViewController: UIViewController {
     weak var delegate: FilterPokemonsDelegate?
     let reuseIdentifier = "Cell"
     var types: [String] = PokemonType.allCases.map { $0.rawValue }
-    
+        
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -37,7 +37,6 @@ class FilterPokemonsViewController: UIViewController {
         view = collectionView
         collectionView.dataSource = self
         collectionView.delegate = self
-        types.sort()
     }
 }
 

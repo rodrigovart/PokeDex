@@ -37,6 +37,8 @@ extension String {
             return MaterialColor.deepPurple.dark1
         case "poison":
             return MaterialColor.deepPurple.light1
+        case "reset":
+            return MaterialColor.black
         default:
             return MaterialColor.brown.light3
         }

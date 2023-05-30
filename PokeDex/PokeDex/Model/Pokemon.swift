@@ -71,6 +71,8 @@ struct PokemonViewModel {
             return MaterialColor.deepPurple.light1
         case .normal:
             return MaterialColor.brown.light3
+        case .reset:
+            return MaterialColor.black
         }
     }
 }
@@ -89,5 +91,6 @@ enum PokemonType: String, CaseIterable {
     case ground   = "ground"
     case ghost    = "ghost"
     case poison   = "poison"
-    case normal  = "normal"
+    case normal   = "normal"
+    case reset  = "reset"
 }
