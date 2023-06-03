@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 import MaterialColor
 
 struct PokemonListResponse: Decodable {
@@ -25,6 +26,7 @@ struct PokemonDetailsResponse: Decodable {
 
 struct SpritesResponse: Decodable {
     let front_default: String
+    let versions: [String: JSON]
 }
 
 struct TypesPokemon: Decodable {
@@ -33,13 +35,6 @@ struct TypesPokemon: Decodable {
 
 struct TypePokemon: Decodable {
     let name: String
-}
-
-struct Pokemon {
-    let id: Int
-    let name: String
-    let imageUrl: String
-    let type: [String]
 }
 
 struct PokemonViewModel {

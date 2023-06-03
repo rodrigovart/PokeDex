@@ -80,7 +80,11 @@ class PokemonListViewController: UIViewController {
     }
 }
 
-extension PokemonListViewController: UITableViewDelegate {}
+extension PokemonListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        dump(pokemons[indexPath.row])
+    }
+}
 
 extension PokemonListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -93,12 +97,12 @@ extension PokemonListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonCollectionViewCell", for: indexPath) as? PokemonCollectionViewCell else { return UITableViewCell() }
-        let pokemon = viewModel.pokemonListValue[indexPath.item]
+        let pokemon = viewModel.pokemonListValue[indexPath.row]
         cell.configure(with: pokemon)
         
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 200
     }
@@ -107,7 +111,7 @@ extension PokemonListViewController: UITableViewDataSource {
 extension PokemonListViewController: FilterPokemonsDelegate {
     func filter(type: String) {
         ProgressHUD.show()
-        let result = pokemons.filter { $0.type.rawValue == type }
+        let result = viewModel.pokemonListValue.filter { $0.type.rawValue == type }
         viewModel.pokemonList.onNext(result.count > 0 ? result : pokemons)
     }
 }

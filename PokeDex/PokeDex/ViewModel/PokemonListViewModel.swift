@@ -51,11 +51,11 @@ class PokemonListViewModel {
                 guard let self = self else { return }
                 
                 switch response.result {
-                case .success(let pokemonDetailsResponse):
-                    let type: PokemonType = self.getPokemonType(for: pokemonDetailsResponse.types.first)
-                    let pokemonViewModel = PokemonViewModel(id: pokemonDetailsResponse.id,
-                                                            name: pokemonDetailsResponse.name,
-                                                            imageUrl: pokemonDetailsResponse.sprites.front_default,
+                case .success(let result):
+                    let type: PokemonType = self.getPokemonType(for: result.types.first)
+                    let pokemonViewModel = PokemonViewModel(id: result.id,
+                                                            name: result.name,
+                                                            imageUrl: result.sprites.front_default,
                                                             type: type)
                     pokemonViewModels.append(pokemonViewModel)
                 case .failure(let error):
@@ -72,7 +72,7 @@ class PokemonListViewModel {
             self.pokemonList.onNext(pokemonViewModels)
         }
     }
-    
+
     private func getPokemonType(for type: TypesPokemon?) -> PokemonType {
         guard let type else { return .normal }
         let lowercaseName = type.type.name
