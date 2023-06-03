@@ -1,12 +1,21 @@
+//
+//  PokemonListViewController.swift
+//  PokeDex
+//
+//  Created by Rodrigo Vart on 06/05/23.
+//
+
 import UIKit
 import RxSwift
 import ProgressHUD
 import MaterialColor
 
 class PokemonListViewController: UIViewController {
+    static let shared = PokemonListViewController()
     private let viewModel = PokemonListViewModel()
     private let disposeBag = DisposeBag()
-    private var pokemons: [PokemonViewModel] = []
+    
+    var pokemons: [PokemonViewModel] = []
     
     private lazy var labelFilter: UILabel = {
         let label = UILabel()
@@ -45,7 +54,9 @@ class PokemonListViewController: UIViewController {
             .subscribe(onNext: { [weak self] result in
                 guard let self else { return }
                 self.configureSubviews()
-                self.pokemons.append(contentsOf: result)
+                if self.pokemons.count == 0 {
+                    self.pokemons.append(contentsOf: result)
+                }
                 self.tableView.reloadData()
                 ProgressHUD.dismiss()
             }).disposed(by: disposeBag)
@@ -106,7 +117,11 @@ extension PokemonListViewController: UITableViewDataSource {
 extension PokemonListViewController: FilterPokemonsDelegate {
     func filter(type: String) {
         ProgressHUD.show()
-        let result = pokemons.filter { $0.type.rawValue == type }
-        viewModel.pokemonList.onNext(result.count > 0 ? result : pokemons)
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.viewModel.pokemonList.onNext(self.pokemons)
+            let result = self.viewModel.pokemonListValue.filter { $0.type.rawValue == type }
+            self.viewModel.pokemonList.onNext(result.count > 0 ? result : self.pokemons)
+        }
     }
 }

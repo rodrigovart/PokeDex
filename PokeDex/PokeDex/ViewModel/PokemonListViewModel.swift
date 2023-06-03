@@ -8,20 +8,29 @@
 import RxSwift
 import RxCocoa
 import Alamofire
-import SwiftyJSON
 import ProgressHUD
+import SwiftMessages
 
 class PokemonListViewModel {
     
     private let apiUrl = "https://pokeapi.co/api/v2/pokemon?limit=151"
     private let apiUrlDetail = "https://pokeapi.co/api/v2/pokemon"
     
+    lazy var error: MessageView = {
+        let error = MessageView.viewFromNib(layout: .tabView)
+        error.configureTheme(.error)
+        error.configureContent(title: "Erro", body: "")
+        error.button?.setTitle("Fechar", for: .normal)
+        return error
+    }()
+    
     let pokemonList = BehaviorSubject<[PokemonViewModel]>(value: [])
     var pokemonListValue: [PokemonViewModel] {
         do {
             return try pokemonList.value()
         } catch {
-            print("Error accessing pokemonList value: \(error)")
+            self.error.configureContent(body: error.localizedDescription)
+            SwiftMessages.show(view: self.error)
             return []
         }
     }
@@ -36,7 +45,8 @@ class PokemonListViewModel {
                 let pokemonNames = pokemonListResponse.results.compactMap { $0.name }
                 self.fetchPokemonDetails(pokemonNames: pokemonNames)
             case .failure(let error):
-                print("Error fetching pokemon data: \(error)")
+                self.error.configureContent(body: error.localizedDescription)
+                SwiftMessages.show(view: self.error)
             }
         }
     }
@@ -61,7 +71,8 @@ class PokemonListViewModel {
                                                             type: type)
                     pokemonViewModels.append(pokemonViewModel)
                 case .failure(let error):
-                    print("Error fetching pokemon details: \(error)")
+                    self.error.configureContent(body: error.localizedDescription)
+                    SwiftMessages.show(view: self.error)
                 }
                 
                 fetchGroup.leave()
