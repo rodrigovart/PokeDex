@@ -45,6 +45,7 @@ class PokemonCollectionViewCell: UITableViewCell {
     }
     
     private func configureSubviews() {
+        selectionStyle = .none
         contentView.addSubview(containerView)
         containerView.addSubview(pokemonImageView)
         containerView.addSubview(nameLabel)
