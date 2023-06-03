@@ -48,8 +48,11 @@ class PokemonListViewController: UIViewController {
                 self.configureSubviews()
                 self.pokemons.append(contentsOf: result)
                 self.tableView.reloadData()
-                ProgressHUD.dismiss()
             }).disposed(by: disposeBag)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            ProgressHUD.dismiss()
+        }
     }
     
     private func configureSubviews() {
@@ -80,11 +83,7 @@ class PokemonListViewController: UIViewController {
     }
 }
 
-extension PokemonListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        dump(pokemons[indexPath.row])
-    }
-}
+extension PokemonListViewController: UITableViewDelegate {}
 
 extension PokemonListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -97,12 +96,12 @@ extension PokemonListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonCollectionViewCell", for: indexPath) as? PokemonCollectionViewCell else { return UITableViewCell() }
-        let pokemon = viewModel.pokemonListValue[indexPath.row]
+        let pokemon = viewModel.pokemonListValue[indexPath.item]
         cell.configure(with: pokemon)
         
         return cell
     }
-
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 200
     }
@@ -110,8 +109,7 @@ extension PokemonListViewController: UITableViewDataSource {
 
 extension PokemonListViewController: FilterPokemonsDelegate {
     func filter(type: String) {
-        ProgressHUD.show()
-        let result = viewModel.pokemonListValue.filter { $0.type.rawValue == type }
+        let result = pokemons.filter { $0.type.rawValue == type }
         viewModel.pokemonList.onNext(result.count > 0 ? result : pokemons)
     }
 }
