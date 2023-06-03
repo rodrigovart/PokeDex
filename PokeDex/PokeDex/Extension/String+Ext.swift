@@ -32,7 +32,7 @@ extension String {
         case "fighting":
             return MaterialColor.deepOrange.accent1
         case "ground":
-            return MaterialColor.brown.dark2
+            return MaterialColor.brown.dark1
         case "ghost":
             return MaterialColor.deepPurple.dark1
         case "poison":

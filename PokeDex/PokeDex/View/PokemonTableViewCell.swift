@@ -75,7 +75,7 @@ class PokemonCollectionViewCell: UITableViewCell {
     
     func configure(with pokemon: PokemonViewModel) {
         nameLabel.text = pokemon.name.capitalized
-        containerView.backgroundColor = pokemon.typeColor
+        containerView.backgroundColor = pokemon.type.rawValue.toPokemonType()
         
         if let url = URL(string: pokemon.imageUrl) {
             pokemonImageView.af.setImage(withURL: url)

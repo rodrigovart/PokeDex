@@ -48,11 +48,8 @@ class PokemonListViewController: UIViewController {
                 self.configureSubviews()
                 self.pokemons.append(contentsOf: result)
                 self.tableView.reloadData()
+                ProgressHUD.dismiss()
             }).disposed(by: disposeBag)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            ProgressHUD.dismiss()
-        }
     }
     
     private func configureSubviews() {
@@ -109,6 +106,7 @@ extension PokemonListViewController: UITableViewDataSource {
 
 extension PokemonListViewController: FilterPokemonsDelegate {
     func filter(type: String) {
+        ProgressHUD.show()
         let result = pokemons.filter { $0.type.rawValue == type }
         viewModel.pokemonList.onNext(result.count > 0 ? result : pokemons)
     }
