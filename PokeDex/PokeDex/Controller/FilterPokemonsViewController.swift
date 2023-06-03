@@ -25,7 +25,6 @@ class FilterPokemonsViewController: UIViewController {
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(FilterPokemonsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        collectionView.backgroundColor = .white
         return collectionView
     }()
     

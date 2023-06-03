@@ -43,7 +43,9 @@ class PokemonListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        if self.traitCollection.userInterfaceStyle == .dark {
+            labelFilter.textColor = MaterialColor.lightText.secondary
+        }
         viewModel.loadPokemonData()
         bindViewModel()
     }
