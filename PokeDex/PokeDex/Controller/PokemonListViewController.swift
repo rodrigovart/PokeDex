@@ -22,7 +22,7 @@ class PokemonListViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textAlignment = .left
         label.text = "Filter by type:"
-        label.textColor = MaterialColor.black
+        label.textColor = MaterialColor.darkGray
         label.numberOfLines = 1
         return label
     }()
