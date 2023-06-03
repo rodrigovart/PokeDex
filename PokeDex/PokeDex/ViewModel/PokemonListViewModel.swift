@@ -9,6 +9,7 @@ import RxSwift
 import RxCocoa
 import Alamofire
 import SwiftyJSON
+import ProgressHUD
 
 class PokemonListViewModel {
     
@@ -26,6 +27,7 @@ class PokemonListViewModel {
     }
     
     func loadPokemonData() {
+        ProgressHUD.show()
         AF.request(apiUrl).responseDecodable(of: PokemonListResponse.self) { [weak self] response in
             guard let self = self else { return }
             
