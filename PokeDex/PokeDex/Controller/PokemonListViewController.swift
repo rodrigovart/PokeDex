@@ -6,6 +6,7 @@ import MaterialColor
 class PokemonListViewController: UIViewController {
     private let viewModel = PokemonListViewModel()
     private let disposeBag = DisposeBag()
+    private var pokemons: [PokemonViewModel] = []
     
     private lazy var labelFilter: UILabel = {
         let label = UILabel()
@@ -45,6 +46,7 @@ class PokemonListViewController: UIViewController {
             .subscribe(onNext: { [weak self] result in
                 guard let self else { return }
                 self.configureSubviews()
+                self.pokemons.append(contentsOf: result)
                 self.tableView.reloadData()
             }).disposed(by: disposeBag)
         
@@ -75,7 +77,7 @@ class PokemonListViewController: UIViewController {
                                          height: 50)
         tableView.anchor(top: filterCollectionView.view.bottomAnchor,
                          left: view.leftAnchor,
-                         bottom: view.bottomAnchor,
+                         bottom: view.safeAreaLayoutGuide.bottomAnchor,
                          right: view.rightAnchor,
                          paddingTop: 8)
     }
@@ -107,6 +109,7 @@ extension PokemonListViewController: UITableViewDataSource {
 
 extension PokemonListViewController: FilterPokemonsDelegate {
     func filter(type: String) {
-        dump(type)
+        let result = pokemons.filter { $0.type.rawValue == type }
+        viewModel.pokemonList.onNext(result.count > 0 ? result : pokemons)
     }
 }
