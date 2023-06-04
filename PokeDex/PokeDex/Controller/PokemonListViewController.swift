@@ -17,14 +17,14 @@ class PokemonListViewController: UIViewController {
     
     var pokemons: [PokemonViewModel] = []
     
-    private lazy var labelFilter: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        label.textAlignment = .left
-        label.text = "Filter by type:"
-        label.textColor = MaterialColor.darkGray
-        label.numberOfLines = 1
-        return label
+    private lazy var resetAllPokemons: UIButton = {
+        let button = UIButton()
+        guard let image = UIImage(systemName:  "arrow.2.circlepath.circle")
+        else { return UIButton() }
+        button.setImage(image, for: .normal)
+        button.addTarget(self, action: #selector(reset), for: .touchUpInside)
+        button.anchor(width: 50, height: 50)
+        return button
     }()
     
     private lazy var filterCollectionView: FilterPokemonsViewController = {
@@ -43,7 +43,8 @@ class PokemonListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        title = "PokéDex"
+        view.backgroundColor = .white
         viewModel.loadPokemonData()
         bindViewModel()
     }
@@ -63,30 +64,27 @@ class PokemonListViewController: UIViewController {
     }
     
     private func configureSubviews() {
-        view.addSubview(labelFilter)
         view.addSubview(filterCollectionView.view)
         view.addSubview(tableView)
-        addChild(filterCollectionView)
-        filterCollectionView.didMove(toParent: self)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: resetAllPokemons)
         configureConstrainsts()
     }
     
     private func configureConstrainsts() {
-        labelFilter.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                           left: view.leftAnchor,
-                           right: view.rightAnchor,
-                           paddingLeft: 8,
-                           paddingBottom: 8)
-        filterCollectionView.view.anchor(top: labelFilter.bottomAnchor,
+        filterCollectionView.view.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                                          left: view.leftAnchor,
                                          right: view.rightAnchor,
                                          paddingTop: 12,
-                                         height: 50)
+                                         height: 100)
         tableView.anchor(top: filterCollectionView.view.bottomAnchor,
                          left: view.leftAnchor,
                          bottom: view.safeAreaLayoutGuide.bottomAnchor,
                          right: view.rightAnchor,
                          paddingTop: 8)
+    }
+    
+   @objc private func reset() {
+        viewModel.pokemonList.onNext(pokemons)
     }
 }
 
@@ -105,23 +103,28 @@ extension PokemonListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonCollectionViewCell", for: indexPath) as? PokemonCollectionViewCell else { return UITableViewCell() }
         let pokemon = viewModel.pokemonListValue[indexPath.item]
         cell.configure(with: pokemon)
+        cell.layoutIfNeeded()
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 200
+        return 220
     }
 }
 
 extension PokemonListViewController: FilterPokemonsDelegate {
-    func filter(type: String) {
+   func filter(type: String) {
         ProgressHUD.show()
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            self.viewModel.pokemonList.onNext(self.pokemons)
-            let result = self.viewModel.pokemonListValue.filter { $0.type.rawValue == type }
-            self.viewModel.pokemonList.onNext(result.count > 0 ? result : self.pokemons)
+            if type.toPokemonType() == .reset {
+                self.viewModel.pokemonList.onNext(self.pokemons)
+            } else {
+                self.viewModel.pokemonList.onNext(self.pokemons)
+                let result = self.viewModel.pokemonListValue.filter { $0.type.contains(type.toPokemonType()) }
+                self.viewModel.pokemonList.onNext(result)
+            }
         }
     }
 }
