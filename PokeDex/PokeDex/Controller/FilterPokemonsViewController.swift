@@ -5,6 +5,7 @@
 //  Created by Rodrigo Vart on 27/05/23.
 //
 
+import MaterialColor
 import UIKit
 
 protocol FilterPokemonsDelegate: AnyObject {
@@ -15,7 +16,17 @@ class FilterPokemonsViewController: UIViewController {
     weak var delegate: FilterPokemonsDelegate?
     let reuseIdentifier = "Cell"
     var types: [String] = PokemonType.allCases.map { $0.rawValue }
-        
+    
+    private lazy var labelFilter: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.textAlignment = .left
+        label.text = "Filter by type:"
+        label.textColor = MaterialColor.darkGray
+        label.numberOfLines = 0
+        return label
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -31,11 +42,34 @@ class FilterPokemonsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set up your collection view
-        collectionView.showsHorizontalScrollIndicator = false
-        view = collectionView
+        view.backgroundColor = .white
+        collectionView.backgroundColor = .white
+        
         collectionView.dataSource = self
         collectionView.delegate = self
+        
+        setupSubViews()
+    }
+    
+    private func setupSubViews() {
+        collectionView.showsHorizontalScrollIndicator = false
+        view.addSubview(labelFilter)
+        view.addSubview(collectionView)
+        
+        setupConstrainsts()
+    }
+    
+    private func setupConstrainsts() {
+        labelFilter.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                           left: view.leftAnchor,
+                           right: view.rightAnchor,
+                           paddingLeft: 8,
+                           paddingBottom: 8)
+        collectionView.anchor(top: labelFilter.bottomAnchor,
+                              left: view.leftAnchor,
+                              bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                              right: view.rightAnchor,
+                              paddingTop: 8)
     }
 }
 
