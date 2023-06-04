@@ -21,7 +21,7 @@ class FilterPokemonsViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textAlignment = .left
-        label.text = "Filter by type:"
+        label.text = "Filtrar por Tipo:"
         label.textColor = MaterialColor.darkGray
         label.numberOfLines = 0
         return label

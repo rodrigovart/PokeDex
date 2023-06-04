@@ -40,10 +40,10 @@ class PokemonListViewController: UIViewController {
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.delegate = self
+        searchBar.placeholder = "Procurar por Nome"
         return searchBar
     }()
 
-    
     private lazy var filterCollectionView: FilterPokemonsViewController = {
         let collectionView = FilterPokemonsViewController()
         collectionView.delegate = self
@@ -89,16 +89,16 @@ class PokemonListViewController: UIViewController {
     }
     
     private func configureConstrainsts() {
-        filterCollectionView.view.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+        searchBar.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                             left: view.leftAnchor,
+                             right: view.rightAnchor,
+                             paddingTop: 8)
+        filterCollectionView.view.anchor(top: searchBar.bottomAnchor,
                                          left: view.leftAnchor,
                                          right: view.rightAnchor,
                                          paddingTop: 12,
                                          height: 100)
-        searchBar.anchor(top: filterCollectionView.view.bottomAnchor,
-                             left: view.leftAnchor,
-                             right: view.rightAnchor,
-                             paddingTop: 8)
-        tableView.anchor(top: searchBar.bottomAnchor,
+        tableView.anchor(top: filterCollectionView.view.bottomAnchor,
                          left: view.leftAnchor,
                          bottom: view.safeAreaLayoutGuide.bottomAnchor,
                          right: view.rightAnchor,
@@ -110,7 +110,17 @@ class PokemonListViewController: UIViewController {
     }
     
     @objc func searchPokemonsInList(with text: String) {
-        filter(type: text)
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            if text.isEmpty {
+                self.viewModel.pokemonList.onNext(self.pokemons)
+            } else {
+                self.viewModel.pokemonList.onNext(self.pokemons)
+                let result = self.viewModel.pokemonListValue.filter { $0.name.contains(text) }
+                print(result)
+                self.viewModel.pokemonList.onNext(result)
+            }
+        }
     }
 }
 
@@ -157,13 +167,8 @@ extension PokemonListViewController: FilterPokemonsDelegate {
 
 extension PokemonListViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchPokemonsInList(with: searchText)
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.text = ""
-        searchBar.resignFirstResponder()
-        searchPokemonsInList(with: "")
+        let text = searchText.lowercased()
+        searchPokemonsInList(with: text)
     }
 }
 
