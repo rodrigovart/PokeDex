@@ -45,6 +45,8 @@ extension String {
             return MaterialColor.darkGray
         case "reset":
             return MaterialColor.black
+        case "normal":
+            return MaterialColor.brown.light3
         default:
             return MaterialColor.brown.light3
         }
@@ -84,8 +86,10 @@ extension String {
             return .fairy
         case "steel":
             return .steel
+        case "normal":
+              return .normal
         default:
-            return .normal
+            return .reset
         }
     }
 }

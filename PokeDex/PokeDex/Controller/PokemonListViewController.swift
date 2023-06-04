@@ -122,9 +122,13 @@ extension PokemonListViewController: FilterPokemonsDelegate {
         ProgressHUD.show()
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            self.viewModel.pokemonList.onNext(self.pokemons)
-//            let result = self.viewModel.pokemonListValue.filter { $0.type.rawValue == type }
-//            self.viewModel.pokemonList.onNext(result.count > 0 ? result : self.pokemons)
+            if type.toPokemonType() == .reset {
+                self.viewModel.pokemonList.onNext(self.pokemons)
+            } else {
+                self.viewModel.pokemonList.onNext(self.pokemons)
+                let result = self.viewModel.pokemonListValue.filter { $0.type.contains(type.toPokemonType()) }
+                self.viewModel.pokemonList.onNext(result)
+            }
         }
     }
 }
