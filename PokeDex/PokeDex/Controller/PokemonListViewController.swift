@@ -19,13 +19,30 @@ class PokemonListViewController: UIViewController {
     
     private lazy var resetAllPokemons: UIButton = {
         let button = UIButton()
-        guard let image = UIImage(systemName:  "arrow.2.circlepath.circle")
+        guard let image = UIImage(systemName: "arrow.2.circlepath.circle")
         else { return UIButton() }
         button.setImage(image, for: .normal)
         button.addTarget(self, action: #selector(reset), for: .touchUpInside)
         button.anchor(width: 50, height: 50)
         return button
     }()
+    
+    private lazy var filterPokemons: UIButton = {
+        let button = UIButton()
+        guard let image = UIImage(systemName: "magnifyingglass.circle")
+        else { return UIButton() }
+        button.setImage(image, for: .normal)
+        button.addTarget(self, action: #selector(searchPokemonsInList), for: .touchUpInside)
+        button.anchor(width: 50, height: 50)
+        return button
+    }()
+    
+    private lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.delegate = self
+        return searchBar
+    }()
+
     
     private lazy var filterCollectionView: FilterPokemonsViewController = {
         let collectionView = FilterPokemonsViewController()
@@ -65,6 +82,7 @@ class PokemonListViewController: UIViewController {
     
     private func configureSubviews() {
         view.addSubview(filterCollectionView.view)
+        view.addSubview(searchBar)
         view.addSubview(tableView)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: resetAllPokemons)
         configureConstrainsts()
@@ -76,7 +94,11 @@ class PokemonListViewController: UIViewController {
                                          right: view.rightAnchor,
                                          paddingTop: 12,
                                          height: 100)
-        tableView.anchor(top: filterCollectionView.view.bottomAnchor,
+        searchBar.anchor(top: filterCollectionView.view.bottomAnchor,
+                             left: view.leftAnchor,
+                             right: view.rightAnchor,
+                             paddingTop: 8)
+        tableView.anchor(top: searchBar.bottomAnchor,
                          left: view.leftAnchor,
                          bottom: view.safeAreaLayoutGuide.bottomAnchor,
                          right: view.rightAnchor,
@@ -86,9 +108,11 @@ class PokemonListViewController: UIViewController {
    @objc private func reset() {
         viewModel.pokemonList.onNext(pokemons)
     }
+    
+    @objc func searchPokemonsInList(with text: String) {
+        filter(type: text)
+    }
 }
-
-extension PokemonListViewController: UITableViewDelegate {}
 
 extension PokemonListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -107,7 +131,9 @@ extension PokemonListViewController: UITableViewDataSource {
         
         return cell
     }
-    
+}
+
+extension PokemonListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 220
     }
@@ -128,3 +154,16 @@ extension PokemonListViewController: FilterPokemonsDelegate {
         }
     }
 }
+
+extension PokemonListViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchPokemonsInList(with: searchText)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+        searchPokemonsInList(with: "")
+    }
+}
+

@@ -36,6 +36,8 @@ class FilterPokemonsViewController: UIViewController {
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(FilterPokemonsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView.dataSource = self
+        collectionView.delegate = self
         return collectionView
     }()
     
@@ -44,10 +46,7 @@ class FilterPokemonsViewController: UIViewController {
         
         view.backgroundColor = .white
         collectionView.backgroundColor = .white
-        
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        
+        types.sort()
         setupSubViews()
     }
     
