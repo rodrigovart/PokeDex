@@ -8,6 +8,7 @@
 import RxSwift
 import RxCocoa
 import Alamofire
+import SwiftyJSON
 import ProgressHUD
 import SwiftMessages
 
@@ -64,7 +65,7 @@ class PokemonListViewModel {
                 
                 switch response.result {
                 case .success(let result):
-                    let type: PokemonType = self.getPokemonType(for: result.types.first)
+                    let type: [PokemonType] = self.getPokemonType(for: result.types)
                     let pokemonViewModel = PokemonViewModel(id: result.id,
                                                             name: result.name,
                                                             imageUrl: result.sprites.front_default,
@@ -86,39 +87,13 @@ class PokemonListViewModel {
         }
     }
 
-    private func getPokemonType(for type: TypesPokemon?) -> PokemonType {
-        guard let type else { return .normal }
-        let lowercaseName = type.type.name
+    private func getPokemonType(for typesPokemon: [TypesPokemon]) -> [PokemonType] {
+        var types: [PokemonType] = []
         
-        switch lowercaseName {
-        case "fire":
-            return .fire
-        case "water":
-            return .water
-        case "grass":
-            return .grass
-        case "bug":
-            return .bug
-        case "dragon":
-            return .dragon
-        case "psychic":
-            return .psychic
-        case "electric":
-            return .electric
-        case "rock":
-            return .rock
-        case "ice":
-            return .ice
-        case "fighting":
-            return .fighting
-        case "ground":
-            return .ground
-        case "ghost":
-            return .ghost
-        case "poison":
-            return .poison
-        default:
-            return .normal
+        for type in typesPokemon {
+            types.append(type.type.name.toPokemonType())
         }
+        
+        return types
     }
 }

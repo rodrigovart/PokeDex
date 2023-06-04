@@ -30,18 +30,20 @@ struct SpritesResponse: Decodable {
 }
 
 struct TypesPokemon: Decodable {
+    let slot: Int
     let type: TypePokemon
 }
 
 struct TypePokemon: Decodable {
     let name: String
+    let url: String
 }
 
 struct PokemonViewModel {
     let id: Int
     let name: String
     let imageUrl: String
-    let type: PokemonType
+    let type: [PokemonType]
 }
 
 enum PokemonType: String, CaseIterable {
@@ -59,5 +61,8 @@ enum PokemonType: String, CaseIterable {
     case ghost    = "ghost"
     case poison   = "poison"
     case normal   = "normal"
-    case reset  = "reset"
+    case flying   = "flying"
+    case fairy    = "fairy"
+    case steel    = "steel"
+    case reset    = "reset"
 }

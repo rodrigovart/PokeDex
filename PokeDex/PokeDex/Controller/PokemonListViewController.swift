@@ -107,12 +107,13 @@ extension PokemonListViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "PokemonCollectionViewCell", for: indexPath) as? PokemonCollectionViewCell else { return UITableViewCell() }
         let pokemon = viewModel.pokemonListValue[indexPath.item]
         cell.configure(with: pokemon)
+        cell.layoutIfNeeded()
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 200
+        return 220
     }
 }
 
@@ -122,8 +123,8 @@ extension PokemonListViewController: FilterPokemonsDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.viewModel.pokemonList.onNext(self.pokemons)
-            let result = self.viewModel.pokemonListValue.filter { $0.type.rawValue == type }
-            self.viewModel.pokemonList.onNext(result.count > 0 ? result : self.pokemons)
+//            let result = self.viewModel.pokemonListValue.filter { $0.type.rawValue == type }
+//            self.viewModel.pokemonList.onNext(result.count > 0 ? result : self.pokemons)
         }
     }
 }

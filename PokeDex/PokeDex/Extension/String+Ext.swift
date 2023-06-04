@@ -9,7 +9,7 @@ import UIKit
 import MaterialColor
 
 extension String {
-    func toPokemonType() -> UIColor {
+    func toPokemonTypeColor() -> UIColor {
         switch self {
         case "fire":
             return MaterialColor.red.base
@@ -22,7 +22,7 @@ extension String {
         case "dragon":
             return MaterialColor.deepOrange.accent2
         case "psychic":
-            return MaterialColor.pink.accent1
+            return MaterialColor.pink.light1
         case "electric":
             return MaterialColor.yellow.dark1
         case "rock":
@@ -37,10 +37,55 @@ extension String {
             return MaterialColor.deepPurple.dark1
         case "poison":
             return MaterialColor.deepPurple.light1
+        case "flying":
+            return MaterialColor.orange.dark4
+        case "fairy":
+            return MaterialColor.pink.accent1
+        case "steel":
+            return MaterialColor.darkGray
         case "reset":
             return MaterialColor.black
         default:
             return MaterialColor.brown.light3
+        }
+    }
+    
+    func toPokemonType() -> PokemonType {
+        switch self {
+        case "fire":
+            return .fire
+        case "water":
+            return .water
+        case "grass":
+            return .grass
+        case "bug":
+            return .bug
+        case "dragon":
+            return .dragon
+        case "psychic":
+            return .psychic
+        case "electric":
+            return .electric
+        case "rock":
+            return .rock
+        case "ice":
+            return .ice
+        case "fighting":
+            return .fighting
+        case "ground":
+            return .ground
+        case "ghost":
+            return .ghost
+        case "poison":
+            return .poison
+        case "flying":
+            return .flying
+        case "fairy":
+            return .fairy
+        case "steel":
+            return .steel
+        default:
+            return .normal
         }
     }
 }
