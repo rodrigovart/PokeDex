@@ -31,7 +31,10 @@ class TagType: UIView {
         backgroundColor = text.toPokemonTypeColor()
         addSubview(label)
         label.text = text.capitalized
-        label.center(inView: self)
+        label.anchor(top: topAnchor,
+                     left: leftAnchor,
+                     bottom: bottomAnchor,
+                     right: rightAnchor)
     }
     
     required init?(coder: NSCoder) {

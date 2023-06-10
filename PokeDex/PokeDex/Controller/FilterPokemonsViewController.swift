@@ -46,7 +46,6 @@ class FilterPokemonsViewController: UIViewController {
         
         view.backgroundColor = .white
         collectionView.backgroundColor = .white
-        types.sort()
         setupSubViews()
     }
     

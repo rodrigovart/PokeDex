@@ -26,6 +26,7 @@ struct PokemonDetailsResponse: Decodable {
 
 struct SpritesResponse: Decodable {
     let front_default: String
+    let other: [String: JSON]
     let versions: [String: JSON]
 }
 
@@ -43,7 +44,7 @@ struct PokemonViewModel {
     let id: Int
     let name: String
     let imageUrl: String
-    let type: [PokemonType]
+    var type: [PokemonType]
 }
 
 enum PokemonType: String, CaseIterable {

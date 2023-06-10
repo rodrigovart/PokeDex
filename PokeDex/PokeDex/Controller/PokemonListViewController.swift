@@ -147,6 +147,13 @@ extension PokemonListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 220
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        dump(viewModel.pokemonListValue[indexPath.row])
+        let viewController = PokemonDetailsViewController()
+        viewController.pokemon = viewModel.pokemonListValue[indexPath.row]
+        navigationController?.pushViewController(viewController, animated: true)
+    }
 }
 
 extension PokemonListViewController: FilterPokemonsDelegate {

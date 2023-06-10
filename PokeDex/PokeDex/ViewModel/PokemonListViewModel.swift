@@ -68,7 +68,7 @@ class PokemonListViewModel {
                     let type: [PokemonType] = self.getPokemonType(for: result.types)
                     let pokemonViewModel = PokemonViewModel(id: result.id,
                                                             name: result.name,
-                                                            imageUrl: result.sprites.front_default,
+                                                            imageUrl: result.sprites.other["home"]!["front_default"].stringValue,
                                                             type: type)
                     pokemonViewModels.append(pokemonViewModel)
                 case .failure(let error):
