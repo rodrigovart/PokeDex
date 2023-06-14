@@ -12,7 +12,8 @@ This is a simple iOS app that demonstrates the MVVM (Model-View-ViewModel) archi
 - Implements MVVM architecture for separation of concerns and testability
 
 ## Screenshots
-<img width="200" height="400" src="https://github.com/rodrigovart/PokeDex/assets/64294078/6d554798-2609-4fec-ba7d-4b0c7961c945">
+<img width="200" height="400" src="https://github.com/rodrigovart/PokeDex/assets/64294078/19d522df-5605-4829-8c03-583a5ae866ec">
+<img width="200" height="400" src="https://github.com/rodrigovart/PokeDex/assets/64294078/2a2c86f9-c41a-472a-ad06-d57b49bcff9b">
 
 ## Installation
 
