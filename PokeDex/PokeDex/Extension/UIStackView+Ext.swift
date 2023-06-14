@@ -8,7 +8,6 @@
 import UIKit
 
 extension UIStackView {
-    
     func removeFully(view: UIView) {
         removeArrangedSubview(view)
         view.removeFromSuperview()
@@ -19,5 +18,16 @@ extension UIStackView {
             removeFully(view: view)
         }
     }
+}
+
+extension UIView {
+    func removeView(view: UIView) {
+        view.removeFromSuperview()
+    }
     
+    func removeSubviews() {
+        subviews.forEach { (view) in
+            removeView(view: view)
+        }
+    }
 }

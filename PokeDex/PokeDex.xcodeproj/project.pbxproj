@@ -23,6 +23,7 @@
 		9D61EBA12A22D2D000A47B24 /* FilterPokemonsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D61EBA02A22D2D000A47B24 /* FilterPokemonsCollectionViewCell.swift */; };
 		9D79B35E2A2BE931002FD3DD /* TagType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D79B35D2A2BE931002FD3DD /* TagType.swift */; };
 		9D79B3602A2BF526002FD3DD /* UIStackView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D79B35F2A2BF526002FD3DD /* UIStackView+Ext.swift */; };
+		9DE64E5E2A2EA22600D5EEBA /* PokemonDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE64E5D2A2EA22600D5EEBA /* PokemonDetailsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		9D61EBA02A22D2D000A47B24 /* FilterPokemonsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterPokemonsCollectionViewCell.swift; sourceTree = "<group>"; };
 		9D79B35D2A2BE931002FD3DD /* TagType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagType.swift; sourceTree = "<group>"; };
 		9D79B35F2A2BF526002FD3DD /* UIStackView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Ext.swift"; sourceTree = "<group>"; };
+		9DE64E5D2A2EA22600D5EEBA /* PokemonDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailsViewController.swift; sourceTree = "<group>"; };
 		B63260C359D99907FE8E3862 /* Pods_PokeDex.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PokeDex.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -101,6 +103,7 @@
 			children = (
 				9D61EB9C2A22B8C900A47B24 /* FilterPokemonsViewController.swift */,
 				1EA117FF2A06143800BF2192 /* PokemonListViewController.swift */,
+				9DE64E5D2A2EA22600D5EEBA /* PokemonDetailsViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -276,6 +279,7 @@
 				9D61EBA12A22D2D000A47B24 /* FilterPokemonsCollectionViewCell.swift in Sources */,
 				9D61EB9F2A22CAD000A47B24 /* String+Ext.swift in Sources */,
 				1EA3EBBC2A06168300755A6E /* UIView+Ext.swift in Sources */,
+				9DE64E5E2A2EA22600D5EEBA /* PokemonDetailsViewController.swift in Sources */,
 				9D79B3602A2BF526002FD3DD /* UIStackView+Ext.swift in Sources */,
 				1EA117FC2A06141600BF2192 /* Pokemon.swift in Sources */,
 				1EA117FE2A06142A00BF2192 /* PokemonListViewModel.swift in Sources */,

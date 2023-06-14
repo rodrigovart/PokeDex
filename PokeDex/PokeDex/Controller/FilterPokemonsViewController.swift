@@ -21,7 +21,7 @@ class FilterPokemonsViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textAlignment = .left
-        label.text = "Filter by type:"
+        label.text = "Filtrar por Tipo:"
         label.textColor = MaterialColor.darkGray
         label.numberOfLines = 0
         return label
@@ -36,6 +36,8 @@ class FilterPokemonsViewController: UIViewController {
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(FilterPokemonsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView.dataSource = self
+        collectionView.delegate = self
         return collectionView
     }()
     
@@ -44,10 +46,6 @@ class FilterPokemonsViewController: UIViewController {
         
         view.backgroundColor = .white
         collectionView.backgroundColor = .white
-        
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        
         setupSubViews()
     }
     
