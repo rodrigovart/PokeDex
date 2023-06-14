@@ -8,85 +8,92 @@
 import RxSwift
 import RxCocoa
 import Alamofire
+import SwiftyJSON
+import ProgressHUD
+import SwiftMessages
 
 class PokemonListViewModel {
     
-    private let apiUrl = "https://pokeapi.co/api/v2/pokemon"
-    private let disposeBag = DisposeBag()
+    private let apiUrl = "https://pokeapi.co/api/v2/pokemon?limit=151"
+    private let apiUrlDetail = "https://pokeapi.co/api/v2/pokemon"
+    
+    lazy var error: MessageView = {
+        let error = MessageView.viewFromNib(layout: .tabView)
+        error.configureTheme(.error)
+        error.configureContent(title: "Erro", body: "")
+        error.button?.setTitle("Fechar", for: .normal)
+        return error
+    }()
     
     let pokemonList = BehaviorSubject<[PokemonViewModel]>(value: [])
     var pokemonListValue: [PokemonViewModel] {
         do {
             return try pokemonList.value()
         } catch {
-            print("Error accessing pokemonList value: \(error)")
+            self.error.configureContent(body: error.localizedDescription)
+            SwiftMessages.show(view: self.error)
             return []
         }
     }
     
     func loadPokemonData() {
-           AF.request(apiUrl).responseDecodable(of: PokemonListResponse.self) { [weak self] response in
-               guard let self = self else { return }
-
-               switch response.result {
-               case .success(let pokemonListResponse):
-                   let pokemonNames = pokemonListResponse.results.compactMap { $0.name }
-                   self.fetchPokemonDetails(pokemonNames: pokemonNames)
-
-               case .failure(let error):
-                   print("Error fetching pokemon data: \(error)")
-               }
-           }
-       }
-
-       private func fetchPokemonDetails(pokemonNames: [String]) {
-           let fetchGroup = DispatchGroup()
-           var pokemonViewModels: [PokemonViewModel] = []
-
-           for name in pokemonNames {
-               fetchGroup.enter()
-
-               let pokemonUrl = "\(apiUrl)/\(name)"
-               AF.request(pokemonUrl).responseDecodable(of: PokemonDetailsResponse.self) { [weak self] response in
-                   guard let self = self else { return }
-
-                   switch response.result {
-                   case .success(let pokemonDetailsResponse):
-                       let type: PokemonType = self.getPokemonType(for: pokemonDetailsResponse.types.first)
-                       let pokemonViewModel = PokemonViewModel(id: pokemonDetailsResponse.id,
-                                                               name: pokemonDetailsResponse.name,
-                                                               imageUrl: pokemonDetailsResponse.sprites.front_default,
-                                                               type: type)
-                       pokemonViewModels.append(pokemonViewModel)
-
-                   case .failure(let error):
-                       print("Error fetching pokemon details: \(error)")
-                   }
-
-                   fetchGroup.leave()
-               }
-           }
-
-           fetchGroup.notify(queue: .main) { [weak self] in
-               self?.pokemonList.onNext(pokemonViewModels)
-           }
-       }
-
-    private func getPokemonType(for type: TypesPokemon?) -> PokemonType {
-        guard let type else { return .unknown }
-        let lowercaseName = type.type.name
-
-            switch lowercaseName {
-            case "fire":
-                return .fire
-            case "water":
-                return .water
-            case "grass":
-                return .grass
-            case "bug":
-                return .bug
-            default:
-                return .unknown
+        ProgressHUD.show()
+        AF.request(apiUrl).responseDecodable(of: PokemonListResponse.self) { [weak self] response in
+            guard let self = self else { return }
+            
+            switch response.result {
+            case .success(let pokemonListResponse):
+                let pokemonNames = pokemonListResponse.results.compactMap { $0.name }
+                self.fetchPokemonDetails(pokemonNames: pokemonNames)
+            case .failure(let error):
+                self.error.configureContent(body: error.localizedDescription)
+                SwiftMessages.show(view: self.error)
             }
+        }
+    }
+    
+    private func fetchPokemonDetails(pokemonNames: [String]) {
+        let fetchGroup = DispatchGroup()
+        var pokemonViewModels: [PokemonViewModel] = []
+        
+        for name in pokemonNames {
+            fetchGroup.enter()
+            
+            let pokemonUrl = "\(apiUrlDetail)/\(name)"
+            AF.request(pokemonUrl).responseDecodable(of: PokemonDetailsResponse.self) { [weak self] response in
+                guard let self = self else { return }
+                
+                switch response.result {
+                case .success(let result):
+                    let type: [PokemonType] = self.getPokemonType(for: result.types)
+                    let pokemonViewModel = PokemonViewModel(id: result.id,
+                                                            name: result.name,
+                                                            imageUrl: result.sprites.other["home"]!["front_default"].stringValue,
+                                                            type: type)
+                    pokemonViewModels.append(pokemonViewModel)
+                case .failure(let error):
+                    self.error.configureContent(body: error.localizedDescription)
+                    SwiftMessages.show(view: self.error)
+                }
+                
+                fetchGroup.leave()
+            }
+        }
+        
+        fetchGroup.notify(queue: .main) { [weak self] in
+            guard let self else { return }
+            pokemonViewModels.sort { $0.id < $1.id }
+            self.pokemonList.onNext(pokemonViewModels)
+        }
+    }
+
+    private func getPokemonType(for typesPokemon: [TypesPokemon]) -> [PokemonType] {
+        var types: [PokemonType] = []
+        
+        for type in typesPokemon {
+            types.append(type.type.name.toPokemonType())
+        }
+        
+        return types
     }
 }

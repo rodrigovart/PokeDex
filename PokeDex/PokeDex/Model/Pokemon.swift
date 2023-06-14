@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 import MaterialColor
 
 struct PokemonListResponse: Decodable {
@@ -25,42 +26,44 @@ struct PokemonDetailsResponse: Decodable {
 
 struct SpritesResponse: Decodable {
     let front_default: String
+    let other: [String: JSON]
+    let versions: [String: JSON]
 }
 
 struct TypesPokemon: Decodable {
+    let slot: Int
     let type: TypePokemon
 }
 
 struct TypePokemon: Decodable {
     let name: String
+    let url: String
 }
 
 struct PokemonViewModel {
     let id: Int
     let name: String
     let imageUrl: String
-    let type: PokemonType
-    
-    var typeColor: UIColor {
-        switch type {
-        case .fire:
-            return MaterialColor.red.base
-        case .water:
-            return MaterialColor.lightBlue.dark1
-        case .grass:
-            return MaterialColor.green.dark1
-        case .bug:
-            return MaterialColor.deepPurple.dark3
-        case .unknown:
-            return MaterialColor.brown.light3
-        }
-    }
+    var type: [PokemonType]
 }
 
-enum PokemonType {
-    case fire
-    case water
-    case grass
-    case bug
-    case unknown
+enum PokemonType: String, CaseIterable {
+    case fire     = "fire"
+    case water    = "water"
+    case grass    = "grass"
+    case bug      = "bug"
+    case dragon   = "dragon"
+    case psychic  = "psychic"
+    case electric = "electric"
+    case rock     = "rock"
+    case ice      = "ice"
+    case fighting = "fighting"
+    case ground   = "ground"
+    case ghost    = "ghost"
+    case poison   = "poison"
+    case normal   = "normal"
+    case flying   = "flying"
+    case fairy    = "fairy"
+    case steel    = "steel"
+    case reset    = "reset"
 }

@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "dfcf4f4c1f18b0d07344c68f4a04ba62--wallpaper-for-phone-comic-book.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
