@@ -48,7 +48,7 @@ class PokemonCollectionViewCell: UITableViewCell {
         stack.alignment = .fill
         stack.distribution = .fillEqually
         stack.spacing = 5.0
-        stack.anchor(height: 40)
+        stack.anchor(width: 80, height: 40)
         return stack
     }()
     
@@ -94,12 +94,15 @@ class PokemonCollectionViewCell: UITableViewCell {
     
     private func makeTags(types: [PokemonType]) {
         tagStackView.removeFullyAllArrangedSubviews()
+        tagStackView.addArrangedSubview(UIView())
+        
         for type in types {
             let tag = TagType()
             tag.configure(text: type.rawValue)
             tagStackView.addArrangedSubview(tag)
+            tagStackView.addArrangedSubview(UIView())
         }
-        tagStackView.layoutIfNeeded()
+        
         stackViewContent.addArrangedSubview(tagStackView)
     }
 }
